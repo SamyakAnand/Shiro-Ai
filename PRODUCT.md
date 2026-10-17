@@ -26,7 +26,7 @@ The application runs locally with SQLite or as a Vercel-hosted workspace using S
 
 - Connect and index a bounded public GitHub source snapshot.
 - Browse indexed files, search source, inspect resolved relative imports, and save investigations.
-- Visualize the file/folder/symbol hierarchy and resolved imports; learn the workspace with an action-gated guided tour.
+- Visualize the file/folder/symbol hierarchy, module architecture areas, and parser-resolved imports; learn the workspace with an action-gated guided tour.
 - Generate and revisit source-cited reports, flashcards, and quizzes, preserving the snapshot commit.
 - Optional NVIDIA hosted answer generation uses a fixed free endpoint; a missing or unavailable provider falls back to local retrieval.
 - Repository source code is never executed. Full repository data remains local; only matched excerpts and the question are sent to NVIDIA when the provider is configured.

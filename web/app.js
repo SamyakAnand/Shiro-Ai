@@ -141,7 +141,7 @@ function setTab(name) {
   });
   $$('.view').forEach(view => view.classList.toggle('hidden', view.id !== `view-${name}`));
   $('#explorer-title').textContent = titles[name] || 'SHIRO';
-  if (name === 'graph') { if($('[data-visual="mindmap"]')?.classList.contains('selected'))loadMindMap();else loadGraph(); }
+  if (name === 'graph') { if($('[data-visual="mindmap"]')?.classList.contains('selected'))loadMindMap();else if($('[data-visual="architecture"]')?.classList.contains('selected'))loadArchitecture();else loadGraph(); }
   if (name === 'investigations') loadInvestigations();
   if (name === 'studio') loadArtifacts();
 }
@@ -186,12 +186,27 @@ async function loadMindMap() {
   } catch(error) { root.innerHTML=`<p class="error-message">${escapeHtml(error.message)}</p>`; }
 }
 
+async function loadArchitecture() {
+  if (!activeRepo) return;
+  const root=$('#architecture-view'); root.innerHTML='<p class="answer-hint">Grouping indexed files into module areas…</p>';
+  try {
+    const map=await api(`/api/repositories/${activeRepo.id}/architecture`); $('#graph-note').textContent=map.note;
+    if(!map.modules.length){root.innerHTML='<p class="answer-hint">No indexed source files were found.</p>';return;}
+    const cardW=184,cardH=92,gapX=24,gapY=42,padX=28,padY=32,idealColumns=Math.ceil(Math.sqrt(map.modules.length)),visibleColumns=Math.max(1,Math.floor((root.clientWidth-padX*2+gapX)/(cardW+gapX))),columns=Math.max(1,Math.min(idealColumns,visibleColumns)),rows=Math.ceil(map.modules.length/columns);
+    const width=Math.max(700,padX*2+columns*cardW+(columns-1)*gapX),height=Math.max(330,padY*2+rows*cardH+(rows-1)*gapY),positions={};
+    map.modules.forEach((module,index)=>{const col=index%columns,row=Math.floor(index/columns);positions[module.id]={x:padX+col*(cardW+gapX),y:padY+row*(cardH+gapY)};});
+    const edgeSvg=map.edges.filter(edge=>positions[edge.source]&&positions[edge.target]).map(edge=>{const a=positions[edge.source],b=positions[edge.target],cx1=a.x+cardW/2,cy1=a.y+cardH/2,cx2=b.x+cardW/2,cy2=b.y+cardH/2,dx=cx2-cx1,dy=cy2-cy1,scale1=Math.min((cardW/2+3)/Math.max(Math.abs(dx),.01),(cardH/2+3)/Math.max(Math.abs(dy),.01)),scale2=Math.min((cardW/2+3)/Math.max(Math.abs(dx),.01),(cardH/2+3)/Math.max(Math.abs(dy),.01)),sx=cx1+dx*scale1,sy=cy1+dy*scale1,tx=cx2-dx*scale2,ty=cy2-dy*scale2,midX=(sx+tx)/2,midY=(sy+ty)/2-22;return `<g class="architecture-link"><path d="M${sx} ${sy} Q${midX} ${midY} ${tx} ${ty}" marker-end="url(#arch-arrow)"/><text x="${midX}" y="${midY-5}">${edge.count} ${edge.count===1?'import':'imports'}</text></g>`;}).join('');
+    const nodes=map.modules.map(module=>{const p=positions[module.id],languages=module.languages.slice(0,2).map(([name,count])=>`${name} ${count}`).join(' · ')||'Source files';return `<g class="architecture-node" tabindex="0" role="button" aria-label="Open sample file ${escapeHtml(module.sample_path)} from ${escapeHtml(module.label)} module" data-graph-path="${escapeHtml(module.sample_path)}" transform="translate(${p.x},${p.y})"><rect width="${cardW}" height="${cardH}" rx="12"/><text class="architecture-name" x="12" y="25">${escapeHtml(module.label.length>23?module.label.slice(0,21)+'…':module.label)}</text><text class="architecture-meta" x="12" y="48">${module.file_count} ${module.file_count===1?'file':'files'} · ${escapeHtml(languages)}</text><text class="architecture-meta" x="12" y="72">${module.internal_imports} internal · ${module.imports_in} in · ${module.imports_out} out</text><title>${escapeHtml(module.files.join('\\n'))}</title></g>`;}).join('');
+    root.innerHTML=`<svg viewBox="0 0 ${width} ${height}" style="width:${width}px;height:${height}px;max-width:none" role="group" aria-label="Architecture flow of ${escapeHtml(map.repository)}"><defs><marker id="arch-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8z"/></marker></defs>${edgeSvg}${nodes}</svg><p class="map-legend"><span>Module areas · up to two folder levels</span><span>Arrows · resolved imports between areas</span><span>${map.modules.length} areas · ${map.edges.reduce((sum,edge)=>sum+edge.count,0)} cross-area imports · commit ${map.commit.slice(0,9)}</span><span>Select an area to open a sample source file.</span></p>`;
+  }catch(error){root.innerHTML=`<p class="error-message">${escapeHtml(error.message)}</p>`;}
+}
+
 function setVisual(kind) {
-  const mindmap=kind==='mindmap';
+  const mindmap=kind==='mindmap',architecture=kind==='architecture';
   $$('[data-visual]').forEach(button=>{const selected=button.dataset.visual===kind;button.classList.toggle('selected',selected);button.setAttribute('aria-pressed',String(selected));});
-  $('#graph-view').classList.toggle('hidden',mindmap); $('#mindmap-view').classList.toggle('hidden',!mindmap);
-  $('#visual-title').textContent=mindmap?'Codebase mind map':'Import map';
-  if(mindmap) loadMindMap(); else loadGraph();
+  $('#graph-view').classList.toggle('hidden',mindmap||architecture); $('#mindmap-view').classList.toggle('hidden',!mindmap); $('#architecture-view').classList.toggle('hidden',!architecture);
+  $('#visual-title').textContent=mindmap?'Codebase mind map':architecture?'Architecture flow':'Import map';
+  if(mindmap) loadMindMap(); else if(architecture) loadArchitecture(); else loadGraph();
   markTour('visual');
 }
 

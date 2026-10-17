@@ -28,6 +28,27 @@ class StudioTests(unittest.TestCase):
         self.assertTrue(any(edge["kind"] == "imports" for edge in result["edges"]))
         self.assertEqual(result["commit"], "a" * 40)
 
+    def test_architecture_map_groups_files_and_aggregates_real_imports(self):
+        with server.connect() as db:
+            db.execute("INSERT INTO files(repo_id,path,language,content,sha256) VALUES(?,?,?,?,?)", (self.repo_id, "web/app.js", "JavaScript", "import auth from '../src/auth.py';\n", "b" * 64))
+            db.execute("INSERT INTO edges(repo_id,source,target,kind) VALUES(?,?,?,?)", (self.repo_id, "web/app.js", "src/auth.py", "imports"))
+        result = server.build_architecture(self.repo_id)
+        modules = {module["id"]: module for module in result["modules"]}
+        self.assertEqual(modules["src"]["file_count"], 2)
+        self.assertEqual(modules["src"]["internal_imports"], 1)
+        self.assertEqual(modules["web"]["file_count"], 1)
+        self.assertEqual(result["edges"], [{"source": "web", "target": "src", "count": 1}])
+
+    def test_architecture_map_keeps_useful_nested_areas_separate(self):
+        with server.connect() as db:
+            db.execute("INSERT INTO files(repo_id,path,language,content,sha256) VALUES(?,?,?,?,?)", (self.repo_id, "apps/api/main.py", "Python", "", "c" * 64))
+            db.execute("INSERT INTO files(repo_id,path,language,content,sha256) VALUES(?,?,?,?,?)", (self.repo_id, "apps/web/main.js", "JavaScript", "", "d" * 64))
+        result = server.build_architecture(self.repo_id)
+        labels = {module["id"] for module in result["modules"]}
+        self.assertIn("apps/api", labels)
+        self.assertIn("apps/web", labels)
+        self.assertNotIn("apps", labels)
+
     def test_artifact_validation_rejects_unknown_citation_paths(self):
         invalid = {"title": "Report", "sections": [{"heading": "Facts", "body": "x", "citations": [{"path": "secret.py", "start": 1, "end": 1}]}]}
         with self.assertRaises(ValueError):

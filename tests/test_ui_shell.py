@@ -34,6 +34,10 @@ class ShiroWorkspaceShellTests(unittest.TestCase):
         for output in ("report", "flashcards", "quiz"):
             self.assertIn(f'data-output="{output}"', self.html)
 
+    def test_architecture_visualization_is_available_alongside_existing_views(self):
+        self.assertIn('data-visual="architecture"', self.html)
+        self.assertIn('id="architecture-view"', self.html)
+
     def test_guided_tour_has_real_action_gates_and_skip(self):
         self.assertIn('id="tour-panel"', self.html)
         self.assertIn('data-action="tour-next"', self.html)

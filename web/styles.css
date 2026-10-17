@@ -56,3 +56,12 @@
 .tour-progress{font-size:11px}
 .tour-progress button,.auth-gate small{font-size:11px}
 .studio-heading .branch-chip{font-size:11px}
+
+.architecture-link path{fill:none;stroke:#54e6f5;stroke-width:1.6;opacity:.68}
+.architecture-link marker path{fill:#54e6f5;stroke:none}
+.architecture-link text{fill:#b8b1c9;font:12px var(--font);text-anchor:middle;paint-order:stroke;stroke:#0d0b15;stroke-width:5px;stroke-linejoin:round}
+.architecture-node{cursor:pointer}
+.architecture-node rect{fill:#171327;stroke:#51426b;stroke-width:1.2}
+.architecture-node:hover rect,.architecture-node:focus rect{stroke:var(--cyan);stroke-width:2}
+.architecture-node .architecture-name{fill:var(--ink);font:600 15px var(--font)}
+.architecture-node .architecture-meta{fill:var(--muted);font:12px var(--font)}

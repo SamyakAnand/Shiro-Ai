@@ -385,6 +385,39 @@ def build_mindmap(repo_id):
             edges.append({"source":"file:"+edge["source"],"target":"file:"+edge["target"],"kind":"imports"})
     return {"commit":repo["commit_sha"],"nodes":nodes,"edges":edges,"note":"Folder and symbol structure comes from the indexed snapshot. Import cross-links are parser-derived and incomplete."}
 
+def build_architecture(repo_id):
+    """Summarize nested source areas and their parser-derived dependencies."""
+    with connect() as db:
+        repo=db.execute("SELECT name,commit_sha FROM repositories WHERE id=? AND status='ready'",(repo_id,)).fetchone()
+        if not repo: raise ValueError("Indexed repository not found.")
+        files=rows_dict(db.execute("SELECT path,language FROM files WHERE repo_id=? ORDER BY path LIMIT 2500",(repo_id,)))
+        imports=rows_dict(db.execute("SELECT source,target FROM edges WHERE repo_id=? AND kind='imports' AND target NOT LIKE 'external:%' AND target NOT LIKE 'unresolved:%' LIMIT 5000",(repo_id,)))
+    modules={}
+    file_modules={}
+    for file in files:
+        parts=file["path"].split("/")
+        module="/".join(parts[:2]) if len(parts)>2 else parts[0] if len(parts)>1 else "(root)"
+        file_modules[file["path"]]=module
+        item=modules.setdefault(module,{"id":module,"label":"Root files" if module=="(root)" else module,"files":[],"languages":{},"internal_imports":0})
+        item["files"].append(file["path"])
+        item["languages"][file["language"]]=item["languages"].get(file["language"],0)+1
+    links={}
+    for edge in imports:
+        source=file_modules.get(edge["source"]); target=file_modules.get(edge["target"])
+        if source and target and source==target:
+            modules[source]["internal_imports"]+=1
+        elif source and target:
+            key=(source,target)
+            links[key]=links.get(key,0)+1
+    for item in modules.values():
+        item["file_count"]=len(item["files"])
+        item["sample_path"]=item["files"][0]
+        item["imports_in"]=sum(count for (source,target),count in links.items() if target==item["id"])
+        item["imports_out"]=sum(count for (source,target),count in links.items() if source==item["id"])
+        item["languages"]=sorted(item["languages"].items(),key=lambda pair:(-pair[1],pair[0]))
+    edges=[{"source":source,"target":target,"count":count} for (source,target),count in sorted(links.items())]
+    return {"repository":repo["name"],"commit":repo["commit_sha"],"modules":sorted(modules.values(),key=lambda item:item["label"].lower()),"edges":edges,"note":"Module areas group files by up to two folder levels. Arrows show parser-resolved imports between areas; internal counts include imports within each area. Unresolved and external imports are omitted."}
+
 def validate_artifact(kind, payload, repo_id):
     """Validate bounded structured output and every referenced source line."""
     if kind not in {"report","flashcards","quiz"} or not isinstance(payload,dict):
@@ -516,6 +549,10 @@ class Handler(BaseHTTPRequestHandler):
                 m=re.fullmatch(r"/api/repositories/([a-f0-9]+)/mindmap",path)
                 if m:
                     try: return self.send_json(200,build_mindmap(m.group(1)))
+                    except ValueError as e: return self.send_json(404,{"error":str(e)})
+                m=re.fullmatch(r"/api/repositories/([a-f0-9]+)/architecture",path)
+                if m:
+                    try: return self.send_json(200,build_architecture(m.group(1)))
                     except ValueError as e: return self.send_json(404,{"error":str(e)})
                 m=re.fullmatch(r"/api/repositories/([a-f0-9]+)/artifacts",path)
                 if m:

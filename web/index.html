@@ -86,8 +86,9 @@
       </section>
 
       <section class="view hidden data-view" id="view-graph" aria-label="Import map">
-        <div class="graph-info"><div><p class="workspace-eyebrow">REPOSITORY STRUCTURE</p><strong id="visual-title">Import map</strong></div><div class="visual-tools"><div class="visual-switch" role="group" aria-label="Choose repository visualization"><button class="selected" data-visual="imports" aria-pressed="true">Imports</button><button data-visual="mindmap" aria-pressed="false">Mind map</button></div><span id="graph-note">Relationships are parsed from real source imports.</span></div></div>
+        <div class="graph-info"><div><p class="workspace-eyebrow">REPOSITORY STRUCTURE</p><strong id="visual-title">Import map</strong></div><div class="visual-tools"><div class="visual-switch" role="group" aria-label="Choose repository visualization"><button class="selected" data-visual="imports" aria-pressed="true">Imports</button><button data-visual="architecture" aria-pressed="false">Architecture</button><button data-visual="mindmap" aria-pressed="false">Mind map</button></div><span id="graph-note">Relationships are parsed from real source imports.</span></div></div>
         <div id="graph-view" class="graph-view"><p class="answer-hint">Select a repository to explore file relationships.</p></div>
+        <div id="architecture-view" class="graph-view hidden" aria-label="Module architecture flow"><p class="answer-hint">Select a repository to map its module dependencies.</p></div>
         <div id="mindmap-view" class="graph-view hidden" aria-label="Interactive codebase mind map"><p class="answer-hint">Select a repository to build its source map.</p></div>
       </section>
 

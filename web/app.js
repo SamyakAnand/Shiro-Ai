@@ -66,12 +66,14 @@ async function refreshRepos() {
 
 function renderRepos() {
   const root = $('#repo-list');
+  $('#repo-filter').disabled=!repositories.length;
+  $('.repo-search-wrap').hidden=!repositories.length;
   const query = $('#repo-filter').value.trim().toLowerCase();
   const visible = repositories.filter(repo => repo.name.toLowerCase().includes(query));
   if (!visible.length) {
     root.innerHTML = repositories.length
       ? '<p class="answer-hint">No repositories match that filter.</p>'
-      : '<div class="empty-repos"><div class="empty-orbit" aria-hidden="true"><span></span><span></span><span></span></div><strong>No repository yet</strong><p>Connect a public GitHub repository and SHIRO will map its source locally.</p><button class="primary small" data-action="connect">Connect GitHub <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>';
+      : '<div class="empty-repos"><strong>No repositories yet</strong><p>Connected codebases will appear here.</p></div>';
     return;
   }
   root.innerHTML = visible.map(repo => `<button class="repo-item ${activeRepo?.id === repo.id ? 'selected' : ''}" data-repo="${escapeHtml(repo.id)}" aria-current="${activeRepo?.id === repo.id ? 'true' : 'false'}"><span class="repo-symbol">${repoIcon()}</span><span><strong>${escapeHtml(repo.name)}</strong><small>${repo.status === 'ready' ? `${repo.file_count} files · ${escapeHtml(repo.branch)}` : escapeHtml(repo.status)}</small></span></button>`).join('');
@@ -81,7 +83,8 @@ async function selectRepo(id) {
   activeRepo = repositories.find(repo => repo.id === id) || null;
   if (!activeRepo) return;
   renderRepos();
-  $('#explorer-title').textContent = activeRepo.name;
+  const currentTab=$('.tab.selected')?.dataset.tab||'ask';
+  $('#explorer-title').textContent = ({ask:'Ask SHIRO',files:'Find source files',graph:'Understand architecture',investigations:'Saved investigations',studio:'Learn with SHIRO'})[currentTab];
   $('#repo-breadcrumb').textContent = `SHIRO / ${activeRepo.name}`;
   $('#branch-chip').textContent = `${activeRepo.branch} · ${activeRepo.commit_sha.slice(0, 9)}`;
   $('#branch-commit').textContent = `${activeRepo.branch} · ${activeRepo.commit_sha.slice(0, 9)}`;
@@ -129,15 +132,12 @@ async function showFile(path, focusStart = null, focusEnd = focusStart) {
 }
 
 function setTab(name) {
-  const titles = { ask: activeRepo?.name || 'Ask SHIRO', files: 'Source files', graph: 'Connections', investigations: 'Investigations', studio: 'Studio' };
+  const titles = { ask: 'Ask SHIRO', files: 'Find source files', graph: 'Understand architecture', investigations: 'Saved investigations', studio: 'Learn with SHIRO' };
   $$('[data-tab]').forEach(tab => {
     const selected = tab.dataset.tab === name;
     tab.classList.toggle('selected', selected);
-    if (tab.getAttribute('role') === 'tab') tab.setAttribute('aria-selected', String(selected));
-    if (tab.classList.contains('workspace-link')) {
-      if (selected) tab.setAttribute('aria-current', 'page');
-      else tab.removeAttribute('aria-current');
-    }
+    if (selected) tab.setAttribute('aria-current', 'page');
+    else tab.removeAttribute('aria-current');
   });
   $$('.view').forEach(view => view.classList.toggle('hidden', view.id !== `view-${name}`));
   $('#explorer-title').textContent = titles[name] || 'SHIRO';
@@ -249,14 +249,14 @@ function renderQuizQuestion() {
 function markTour(action) { if(!tour.active||tourSteps[tour.step]?.action!==action)return;tour.ready=true;renderTour(); }
 function renderTour() {
   const panel=$('#tour-panel');if(!panel)return;
-  if(!tour.active){panel.hidden=localStorage.getItem(`shiro-tour:${tourUserId}:skipped`)==='1'||localStorage.getItem(`shiro-tour:${tourUserId}:complete`)==='1';return;}
+  if(!tour.active){panel.hidden=true;return;}
   const step=tourSteps[tour.step];panel.hidden=false;$('#tour-progress-label').textContent=`Guided tour · ${tour.step+1} of ${tourSteps.length}`;$('#tour-title').textContent=step.title;$('#tour-copy').textContent=step.copy;
   const start=panel.querySelector('[data-action="tour-start"]');start.textContent=step.cta;start.dataset.tourCta=step.action;
   panel.querySelector('[data-action="tour-next"]').disabled=!tour.ready;
 }
 
 function startTour() { tour={active:true,step:0,ready:Boolean(activeRepo)};localStorage.removeItem(`shiro-tour:${tourUserId}:skipped`);renderTour(); }
-function tourCta(action) { if(action==='repo'){if(activeRepo)markTour('repo');else openConnect();}if(action==='file'){setTab('files');}if(action==='visual'){setTab('graph');setVisual('mindmap');}if(action==='citation'){setTab('ask');$('#companion-question').focus();}if(action==='artifact'){setTab('studio');} }
+function tourCta(action) { if(action==='repo'){if(activeRepo)markTour('repo');else openConnect();}if(action==='file'){setTab('files');}if(action==='visual'){setTab('graph');setVisual('architecture');}if(action==='citation'){setTab('ask');$('#companion-question').focus();}if(action==='artifact'){setTab('studio');} }
 
 function setHostedAuthState(session, message='') {
   const locked=!session;
@@ -381,6 +381,14 @@ function setCompanionState(state, label, activity) {
 }
 
 function updateCompanionContext() {
+  const hasRepo=Boolean(activeRepo);
+  $('#first-run-panel').hidden=hasRepo;
+  $$('.requires-repo').forEach(element=>{element.hidden=!hasRepo;});
+  $('#view-ask').classList.toggle('first-run',!hasRepo);
+  $$('#view-studio [data-output],#studio-generate,#investigation-form button').forEach(button=>{button.disabled=!hasRepo;});
+  $('#investigation-form').querySelectorAll('input,textarea').forEach(field=>{field.disabled=!hasRepo;});
+  $('#studio-needs-repo').hidden=hasRepo;
+  $('#file-filter').disabled=!hasRepo;
   $$('.companion-repo-label').forEach(label => {
     label.textContent = activeRepo ? ` · ${activeRepo.name}` : ' · Select a repository';
   });
@@ -596,6 +604,7 @@ async function health() {
 
 async function initializeWorkspace(){
   const ready=await configureHostedAuth();
+  updateCompanionContext();
   renderTour();
   if(ready){await refreshRepos();await health();}
 }

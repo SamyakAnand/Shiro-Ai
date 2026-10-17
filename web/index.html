@@ -21,36 +21,44 @@
         <span class="brand-mark" aria-hidden="true"><img src="/assets/shiro-icon-32.png" alt=""></span>
         <span class="brand-name">SHIRO <b>CodeMind</b><small>INTELLIGENCE ENGINE</small></span>
       </a>
-      <button class="repo-toggle" id="repo-toggle" data-action="toggle-repositories" aria-expanded="false" aria-controls="repo-panel" aria-label="Show repositories">
+      <button class="repo-toggle" id="repo-toggle" data-action="toggle-repositories" aria-expanded="false" aria-controls="repo-panel" aria-label="Open workspace and repositories">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg>
       </button>
       <div class="topbar-context"><span class="status-dot" aria-hidden="true"></span><span id="stage-repo">No repository selected</span></div>
       <div class="topbar-actions">
         <span class="branch-chip" id="branch-chip">LOCAL WORKSPACE</span>
-        <button class="connect-top" data-action="connect"><span>Connect GitHub repo</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
         <button class="quiet small auth-signout" id="auth-signout" hidden>Sign out</button>
       </div>
     </header>
 
-    <nav class="rail" aria-label="Workspace views">
+    <nav class="rail" aria-label="Workspace navigation">
       <button class="workspace-link tab selected" data-tab="ask" aria-current="page" aria-label="Ask SHIRO" title="Ask SHIRO"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5h14v10H11l-4.5 3v-3H5z"/><path d="M9 10h6M9 13h4"/></svg><span>Ask</span></button>
-      <button class="workspace-link tab" data-tab="files" aria-label="Files" title="Files"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h6l2 2h7v11h-15z"/><path d="M4.5 9h15"/></svg><span>Files</span></button>
-      <button class="workspace-link tab" data-tab="graph" aria-label="Connections" title="Connections"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="17.5" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="m8 11 7.5-4M8 13l7.8 4"/></svg><span>Graph</span></button>
-      <button class="workspace-link tab" data-tab="investigations" aria-label="Investigations" title="Investigations"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h12v15H6zM9 8h6M9 11.5h6M9 15h4"/></svg><span>Notes</span></button>
-      <button class="workspace-link tab" data-tab="studio" aria-label="Studio" title="Studio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v13H4zM8 9h8M8 12h5M8 15h7"/><path d="m17 3 1.2 1.2L17 5.4 15.8 4.2z"/></svg><span>Studio</span></button>
+      <button class="workspace-link tab" data-tab="files" aria-label="Find source files" title="Find source files"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h6l2 2h7v11h-15z"/><path d="M4.5 9h15"/></svg><span>Files</span></button>
+      <button class="workspace-link tab" data-tab="graph" aria-label="Understand architecture" title="Understand architecture"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="17.5" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="m8 11 7.5-4M8 13l7.8 4"/></svg><span>Map</span></button>
+      <button class="workspace-link tab" data-tab="investigations" aria-label="Saved investigations" title="Saved investigations"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h12v15H6zM9 8h6M9 11.5h6M9 15h4"/></svg><span>Saved</span></button>
+      <button class="workspace-link tab" data-tab="studio" aria-label="Learn with SHIRO" title="Learn with SHIRO"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v13H4zM8 9h8M8 12h5M8 15h7"/><path d="m17 3 1.2 1.2L17 5.4 15.8 4.2z"/></svg><span>Learn</span></button>
       <button class="workspace-link" data-action="tour-start" aria-label="Start guided tour" title="Guided tour"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m10 8 6 4-6 4z"/></svg><span>Tour</span></button>
       <div class="rail-spacer"></div>
       <span class="rail-presence"><i aria-hidden="true"></i> <span id="rail-mode-label">LOCAL</span></span>
     </nav>
 
     <aside class="repo-panel" id="repo-panel" aria-label="Repositories">
+      <div class="sidebar-section-heading">WORKSPACE</div>
+      <nav class="workspace-navigation" aria-label="SHIRO workspace features">
+        <button class="workspace-nav-item tab selected" data-tab="ask" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5h14v10H11l-4.5 3v-3H5z"/><path d="M9 10h6M9 13h4"/></svg><span><strong>Ask SHIRO</strong><small>Get answers with code citations</small></span></button>
+        <button class="workspace-nav-item tab" data-tab="graph"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="17.5" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="m8 11 7.5-4M8 13l7.8 4"/></svg><span><strong>Understand architecture</strong><small>See modules and dependencies</small></span></button>
+        <button class="workspace-nav-item tab" data-tab="files"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h6l2 2h7v11h-15z"/><path d="M4.5 9h15"/></svg><span><strong>Find source files</strong><small>Search and inspect exact lines</small></span></button>
+        <button class="workspace-nav-item tab" data-tab="studio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v13H4zM8 9h8M8 12h5M8 15h7"/><path d="m17 3 1.2 1.2L17 5.4 15.8 4.2z"/></svg><span><strong>Learn with SHIRO</strong><small>Create reports, maps, cards, and quizzes</small></span></button>
+        <button class="workspace-nav-item tab" data-tab="investigations"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h12v15H6zM9 8h6M9 11.5h6M9 15h4"/></svg><span><strong>Saved investigations</strong><small>Keep questions and findings</small></span></button>
+      </nav>
+      <div class="sidebar-divider"></div>
       <div class="panel-heading">
         <div><span class="panel-kicker">YOUR CODEBASES</span><h1>Repositories</h1></div>
         <button class="icon-button" data-action="connect" aria-label="Connect repository"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
       </div>
       <div class="repo-search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.5 15.5 4 4"/></svg><input id="repo-filter" type="search" placeholder="Filter repositories" aria-label="Filter repositories"></div>
       <div id="repo-list" class="repo-list">
-        <div class="empty-repos"><div class="empty-orbit" aria-hidden="true"><span></span><span></span><span></span></div><strong>No repository yet</strong><p>Connect a public GitHub repository and SHIRO will map its source locally.</p><button class="primary small" data-action="connect">Connect GitHub <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+        <div class="empty-repos"><strong>No repositories yet</strong><p>Connected codebases will appear here.</p></div>
       </div>
       <div class="repo-footer"><span class="repo-lock" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span><span id="repo-storage-label">Index stays on this machine</span></div>
     </aside>
@@ -60,52 +68,52 @@
         <div class="workspace-title"><span class="sr-only" id="repo-breadcrumb">SHIRO / WORKSPACE</span><p class="workspace-eyebrow">CODEBASE INTELLIGENCE</p><h2 id="explorer-title">Ask SHIRO</h2></div>
         <div class="repo-controls"><span class="branch-chip branch-commit" id="branch-commit">Waiting for a repository</span><button class="delete-repo" data-action="delete-repo" hidden>Remove index</button></div>
       </div>
-      <div class="workspace-tabs" role="tablist" aria-label="Repository tools">
-        <button class="tab selected" data-tab="ask" role="tab" aria-selected="true">Conversation</button>
-        <button class="tab" data-tab="files" role="tab" aria-selected="false">Source files</button>
-        <button class="tab" data-tab="graph" role="tab" aria-selected="false">Import map</button>
-        <button class="tab" data-tab="investigations" role="tab" aria-selected="false">Investigations</button>
-        <button class="tab" data-tab="studio" role="tab" aria-selected="false">Studio</button>
-      </div>
-
       <section class="view conversation-view" id="view-ask" aria-label="Conversation with SHIRO">
         <div class="conversation-topline">
           <div class="assistant-presence"><span class="assistant-avatar"><img id="companion-launcher-portrait" src="assets/shiro-neutral.png" alt="" loading="eager"></span><span><strong>SHIRO</strong><small><i></i><span class="companion-state-label">Ready</span><span class="companion-repo-label"> · Select a repository</span></small></span></div>
-          <details class="activity-menu"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3M6 6l2.1 2.1M15.9 15.9 18 18M18 6l-2.1 2.1M8.1 15.9 6 18"/><circle cx="12" cy="12" r="3.5"/></svg><span>Activity</span></summary><p id="companion-activity-text">Connect a repository to begin source-backed analysis.</p></details>
+          <details class="activity-menu requires-repo" hidden><summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3M6 6l2.1 2.1M15.9 15.9 18 18M18 6l-2.1 2.1M8.1 15.9 6 18"/><circle cx="12" cy="12" r="3.5"/></svg><span>Activity</span></summary><p id="companion-activity-text">Connect a repository to begin source-backed analysis.</p></details>
         </div>
-        <div class="conversation-intro" id="conversation-intro"><p class="conversation-title">Every codebase has a pattern.</p><p class="conversation-subtitle">Ask about the code. Shiro will search the indexed source and show the lines behind the answer.</p></div>
-        <div class="suggestions" aria-label="Example questions"><button data-question="Where is authentication implemented?">Where is authentication implemented?</button><button data-question="Explain the project architecture">Explain the project architecture</button><button data-question="What imports the main module?">What imports the main module?</button></div>
-        <div class="companion-messages" id="companion-messages" role="log" aria-live="polite" aria-relevant="additions text"></div>
-        <form class="companion-form" id="companion-form"><label class="sr-only" for="companion-question">Ask SHIRO about the selected repository</label><div class="composer-frame"><textarea id="companion-question" rows="2" maxlength="500" placeholder="Ask about this codebase…" required></textarea><div class="composer-bottom"><span>Answers use matched source excerpts</span><button type="submit" aria-label="Send question"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6.5 10.5 12 5l5.5 5.5"/></svg></button></div></div></form>
-        <p class="companion-footnote">Local source search · Evidence-linked</p>
+        <div class="workspace-welcome" id="first-run-panel">
+          <h3>Start with a repository.</h3>
+          <p>Connect a public GitHub repository. SHIRO indexes a source snapshot on this machine so your questions can point to real files and lines.</p>
+          <button class="primary" data-action="connect">Connect a public GitHub repository <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <ol class="first-run-steps"><li><strong>Connect</strong><span>Choose a public repository</span></li><li><strong>Understand</strong><span>Explore files and architecture</span></li><li><strong>Ask or study</strong><span>Get cited answers and learning tools</span></li></ol>
+        </div>
+        <div class="conversation-intro requires-repo" id="conversation-intro" hidden><p class="conversation-title">Ask about this codebase.</p><p class="conversation-subtitle">SHIRO searches the indexed snapshot and links answers to the source lines.</p></div>
+        <div class="suggestions requires-repo" aria-label="Example questions" hidden><button data-question="Where is authentication implemented?">Where is authentication implemented?</button><button data-question="Explain the project architecture">Explain the project architecture</button><button data-question="What imports the main module?">What imports the main module?</button></div>
+        <div class="companion-messages requires-repo" id="companion-messages" role="log" aria-live="polite" aria-relevant="additions text" hidden></div>
+        <form class="companion-form requires-repo" id="companion-form" hidden><label class="sr-only" for="companion-question">Ask SHIRO about the selected repository</label><div class="composer-frame"><textarea id="companion-question" rows="2" maxlength="500" placeholder="Ask about this codebase…" required></textarea><div class="composer-bottom"><span>Answers link to matched source lines</span><button type="submit" aria-label="Ask SHIRO"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6.5 10.5 12 5l5.5 5.5"/></svg></button></div></div></form>
+        <p class="companion-footnote requires-repo" hidden>Local source search · Evidence-linked</p>
       </section>
 
-      <section class="view hidden data-view" id="view-files" aria-label="Source files">
+      <section class="view hidden data-view" id="view-files" aria-label="Find source files">
+        <div class="view-intro"><h3>Find source files</h3><p>Search the indexed snapshot, then open a file to inspect its exact lines.</p></div>
         <div class="file-toolbar"><label class="file-filter"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.5 15.5 4 4"/></svg><input id="file-filter" type="search" placeholder="Filter indexed files…" aria-label="Filter indexed files"></label><span id="file-count">0 files</span></div>
         <div class="file-browser"><div id="file-list" class="file-list"><p class="answer-hint">Connect a repository to browse its files.</p></div><pre id="file-source" class="file-source"><code>Select a file to inspect its indexed source.</code></pre></div>
       </section>
 
-      <section class="view hidden data-view" id="view-graph" aria-label="Import map">
-        <div class="graph-info"><div><p class="workspace-eyebrow">REPOSITORY STRUCTURE</p><strong id="visual-title">Import map</strong></div><div class="visual-tools"><div class="visual-switch" role="group" aria-label="Choose repository visualization"><button class="selected" data-visual="imports" aria-pressed="true">Imports</button><button data-visual="architecture" aria-pressed="false">Architecture</button><button data-visual="mindmap" aria-pressed="false">Mind map</button></div><span id="graph-note">Relationships are parsed from real source imports.</span></div></div>
-        <div id="graph-view" class="graph-view"><p class="answer-hint">Select a repository to explore file relationships.</p></div>
-        <div id="architecture-view" class="graph-view hidden" aria-label="Module architecture flow"><p class="answer-hint">Select a repository to map its module dependencies.</p></div>
+      <section class="view hidden data-view" id="view-graph" aria-label="Understand architecture">
+        <div class="graph-info"><div><p class="workspace-eyebrow">REPOSITORY STRUCTURE</p><strong id="visual-title">Architecture flow</strong></div><div class="visual-tools"><div class="visual-switch" role="group" aria-label="Choose repository visualization"><button class="selected" data-visual="architecture" aria-pressed="true">Architecture</button><button data-visual="mindmap" aria-pressed="false">Mind map</button><button data-visual="imports" aria-pressed="false">Imports</button></div><span id="graph-note">See how source areas and module imports fit together.</span></div></div>
+        <div id="graph-view" class="graph-view hidden"><p class="answer-hint">Connect a repository to inspect file imports.</p></div>
+        <div id="architecture-view" class="graph-view" aria-label="Module architecture flow"><p class="answer-hint">Connect a repository to map its module dependencies.</p></div>
         <div id="mindmap-view" class="graph-view hidden" aria-label="Interactive codebase mind map"><p class="answer-hint">Select a repository to build its source map.</p></div>
       </section>
 
-      <section class="view hidden data-view" id="view-investigations" aria-label="Investigations">
-        <div class="investigation-heading"><p class="workspace-eyebrow">SOURCE-BACKED NOTES</p><h3>Investigations</h3><p>Save a question and its current source findings for later.</p></div>
-        <form id="investigation-form" class="investigation-form"><label>Investigation title<input id="investigation-title" maxlength="120" placeholder="e.g. Login redirect fails" required></label><label>Problem statement<textarea id="investigation-question" maxlength="500" rows="3" placeholder="Describe what you observed…" required></textarea></label><button class="primary small" type="submit">Save investigation <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>
-        <div id="investigation-list" class="investigation-list"></div>
+      <section class="view hidden data-view" id="view-investigations" aria-label="Saved investigations">
+        <div class="view-intro"><h3>Saved investigations</h3><p>Keep a question and its source findings together so you can return to the same problem later.</p></div>
+        <form id="investigation-form" class="investigation-form"><label>What are you investigating?<input id="investigation-title" maxlength="120" placeholder="e.g. Login redirect fails" required></label><label>Describe what happened<textarea id="investigation-question" maxlength="500" rows="3" placeholder="Include the behavior you expected and what you saw…" required></textarea></label><button class="primary small" type="submit">Save investigation <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>
+        <div id="investigation-list" class="investigation-list"><p class="answer-hint">Connect a repository to save questions and their source findings.</p></div>
       </section>
 
-      <section class="view hidden data-view studio-view" id="view-studio" aria-label="SHIRO Studio learning tools">
-        <div class="studio-heading"><div><p class="workspace-eyebrow">SOURCE-GROUNDED LEARNING</p><h3>Studio</h3><p>Turn this indexed snapshot into explanations you can inspect and study.</p></div><span id="studio-commit" class="branch-chip">No snapshot selected</span></div>
+      <section class="view hidden data-view studio-view" id="view-studio" aria-label="Learn with SHIRO">
+        <div class="studio-heading"><div><h3>Learn with SHIRO</h3><p>Create reports, flashcards, and quizzes from cited source.</p></div><span id="studio-commit" class="branch-chip">No snapshot selected</span></div>
         <div class="studio-actions" role="group" aria-label="Create a Studio output">
           <button class="studio-action selected" data-output="report" aria-pressed="true"><strong>Report</strong><span>Briefing, architecture, feature trace, or bug investigation</span></button>
           <button class="studio-action" data-output="mindmap" aria-pressed="false"><strong>Mind map</strong><span>Explore folders, symbols, and imports</span></button>
           <button class="studio-action" data-output="flashcards" aria-pressed="false"><strong>Flashcards</strong><span>Review concepts from source excerpts</span></button>
           <button class="studio-action" data-output="quiz" aria-pressed="false"><strong>Quiz</strong><span>Check what you understood</span></button>
         </div>
+        <p id="studio-needs-repo" class="answer-hint">Connect a repository before creating a source-backed study output.</p>
         <form id="studio-form" class="studio-form">
           <label id="report-format-wrap">Report style<select id="report-format"><option>repository briefing</option><option>architecture walkthrough</option><option>feature trace</option><option>bug investigation</option></select></label>
           <label>Focus <input id="studio-focus" maxlength="240" placeholder="e.g. sign-in flow, request routing, database layer"></label>

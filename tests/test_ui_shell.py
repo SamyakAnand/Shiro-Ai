@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import unittest
 
 
@@ -22,6 +23,26 @@ class ShiroWorkspaceShellTests(unittest.TestCase):
         self.assertIn('id="companion-messages"', ask_view)
         self.assertIn('id="companion-form"', ask_view)
         self.assertIn('id="shiro-portrait"', self.html)
+
+    def test_desktop_uses_one_plain_language_navigation_in_the_repository_sidebar(self):
+        self.assertIn('class="workspace-navigation"', self.html)
+        self.assertNotIn('class="workspace-tabs"', self.html)
+        for label in ("Ask SHIRO", "Understand architecture", "Find source files", "Learn with SHIRO", "Saved investigations"):
+            self.assertIn(f">{label}</strong>", self.html)
+
+    def test_mobile_drawer_hides_the_second_feature_navigation(self):
+        css = Path(os.path.join(ROOT, "web", "styles.css")).read_text(encoding="utf-8")
+        self.assertIn(".workspace-navigation,.sidebar-section-heading,.sidebar-divider{display:none}", css)
+        self.assertIn(".repo-search-wrap[hidden]{display:none}", css)
+
+    def test_first_run_guides_repository_connection_before_chat(self):
+        self.assertIn('id="first-run-panel"', self.html)
+        self.assertIn('data-action="connect"', self.html.split('id="first-run-panel"', 1)[1].split('</div>', 1)[0])
+        self.assertIn('class="conversation-intro requires-repo"', self.html)
+        self.assertIn('Connect a public GitHub repository', self.html)
+
+    def test_guided_tour_does_not_open_over_the_workspace_automatically(self):
+        self.assertIn('if(!tour.active){panel.hidden=true;return;}', Path(os.path.join(ROOT, "web", "app.js")).read_text(encoding="utf-8"))
 
     def test_repository_tools_remain_available_as_workspace_views(self):
         for view in ("ask", "files", "graph", "investigations", "studio"):

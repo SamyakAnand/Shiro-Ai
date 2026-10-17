@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090711">
+  <meta name="description" content="Meet SHIRO CodeMind: a character-led workspace for exploring codebases with real source evidence.">
+  <title>SHIRO CodeMind — Repository Intelligence</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/shiro-icon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/shiro-icon-180.png">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="companion.css">
+</head>
+<body>
+  <main class="workspace-shell" id="workspace-shell" data-state="idle">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="SHIRO CodeMind home">
+        <span class="brand-mark" aria-hidden="true"><img src="/assets/shiro-icon-32.png" alt=""></span>
+        <span class="brand-name">SHIRO <b>CodeMind</b><small>INTELLIGENCE ENGINE</small></span>
+      </a>
+      <button class="repo-toggle" id="repo-toggle" data-action="toggle-repositories" aria-expanded="false" aria-controls="repo-panel" aria-label="Show repositories">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg>
+      </button>
+      <div class="topbar-context"><span class="status-dot" aria-hidden="true"></span><span id="stage-repo">No repository selected</span></div>
+      <div class="topbar-actions">
+        <span class="branch-chip" id="branch-chip">LOCAL WORKSPACE</span>
+        <button class="connect-top" data-action="connect"><span>Connect GitHub repo</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
+      </div>
+    </header>
+
+    <nav class="rail" aria-label="Workspace views">
+      <button class="workspace-link tab selected" data-tab="ask" aria-current="page" aria-label="Ask SHIRO" title="Ask SHIRO"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5h14v10H11l-4.5 3v-3H5z"/><path d="M9 10h6M9 13h4"/></svg><span>Ask SHIRO</span></button>
+      <button class="workspace-link tab" data-tab="files" aria-label="Files" title="Files"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h6l2 2h7v11h-15z"/><path d="M4.5 9h15"/></svg><span>Files</span></button>
+      <button class="workspace-link tab" data-tab="graph" aria-label="Connections" title="Connections"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="17.5" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="m8 11 7.5-4M8 13l7.8 4"/></svg><span>Connections</span></button>
+      <button class="workspace-link tab" data-tab="investigations" aria-label="Investigations" title="Investigations"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h12v15H6zM9 8h6M9 11.5h6M9 15h4"/></svg><span>Investigations</span></button>
+      <div class="rail-spacer"></div>
+      <span class="rail-presence"><i aria-hidden="true"></i> LOCAL</span>
+    </nav>
+
+    <aside class="repo-panel" id="repo-panel" aria-label="Repositories">
+      <div class="panel-heading">
+        <div><span class="panel-kicker">YOUR CODEBASES</span><h1>Repositories</h1></div>
+        <button class="icon-button" data-action="connect" aria-label="Connect repository"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+      </div>
+      <div class="repo-search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.5 15.5 4 4"/></svg><input id="repo-filter" type="search" placeholder="Filter repositories" aria-label="Filter repositories"></div>
+      <div id="repo-list" class="repo-list">
+        <div class="empty-repos"><div class="empty-orbit" aria-hidden="true"><span></span><span></span><span></span></div><strong>No repository yet</strong><p>Connect a public GitHub repository and SHIRO will map its source locally.</p><button class="primary small" data-action="connect">Connect GitHub <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+      </div>
+      <div class="repo-footer"><span class="repo-lock" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span><span>Index stays on this machine</span></div>
+    </aside>
+
+    <section class="explorer" id="workspace" aria-label="Repository workspace">
+      <div class="explorer-top">
+        <div class="workspace-title"><span class="sr-only" id="repo-breadcrumb">SHIRO / WORKSPACE</span><p class="workspace-eyebrow">CODEBASE INTELLIGENCE</p><h2 id="explorer-title">Ask SHIRO</h2></div>
+        <div class="repo-controls"><span class="branch-chip branch-commit" id="branch-commit">Waiting for a repository</span><button class="delete-repo" data-action="delete-repo" hidden>Remove index</button></div>
+      </div>
+      <div class="workspace-tabs" role="tablist" aria-label="Repository tools">
+        <button class="tab selected" data-tab="ask" role="tab" aria-selected="true">Conversation</button>
+        <button class="tab" data-tab="files" role="tab" aria-selected="false">Source files</button>
+        <button class="tab" data-tab="graph" role="tab" aria-selected="false">Import map</button>
+        <button class="tab" data-tab="investigations" role="tab" aria-selected="false">Investigations</button>
+      </div>
+
+      <section class="view conversation-view" id="view-ask" aria-label="Conversation with SHIRO">
+        <div class="conversation-topline">
+          <div class="assistant-presence"><span class="assistant-avatar"><img id="companion-launcher-portrait" src="assets/shiro-neutral.png" alt="" loading="eager"></span><span><strong>SHIRO</strong><small><i></i><span class="companion-state-label">Ready</span><span class="companion-repo-label"> · Select a repository</span></small></span></div>
+          <details class="activity-menu"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3M6 6l2.1 2.1M15.9 15.9 18 18M18 6l-2.1 2.1M8.1 15.9 6 18"/><circle cx="12" cy="12" r="3.5"/></svg><span>Activity</span></summary><p id="companion-activity-text">Connect a repository to begin source-backed analysis.</p></details>
+        </div>
+        <div class="conversation-intro" id="conversation-intro"><p class="conversation-title">Every codebase has a pattern.</p><p class="conversation-subtitle">Ask about the code. Shiro will search the indexed source and show the lines behind the answer.</p></div>
+        <div class="suggestions" aria-label="Example questions"><button data-question="Where is authentication implemented?">Where is authentication implemented?</button><button data-question="Explain the project architecture">Explain the project architecture</button><button data-question="What imports the main module?">What imports the main module?</button></div>
+        <div class="companion-messages" id="companion-messages" role="log" aria-live="polite" aria-relevant="additions text"></div>
+        <form class="companion-form" id="companion-form"><label class="sr-only" for="companion-question">Ask SHIRO about the selected repository</label><div class="composer-frame"><textarea id="companion-question" rows="2" maxlength="500" placeholder="Ask about this codebase…" required></textarea><div class="composer-bottom"><span>Answers use matched source excerpts</span><button type="submit" aria-label="Send question"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6.5 10.5 12 5l5.5 5.5"/></svg></button></div></div></form>
+        <p class="companion-footnote">Local source search · Evidence-linked</p>
+      </section>
+
+      <section class="view hidden data-view" id="view-files" aria-label="Source files">
+        <div class="file-toolbar"><label class="file-filter"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.5 15.5 4 4"/></svg><input id="file-filter" type="search" placeholder="Filter indexed files…" aria-label="Filter indexed files"></label><span id="file-count">0 files</span></div>
+        <div class="file-browser"><div id="file-list" class="file-list"><p class="answer-hint">Connect a repository to browse its files.</p></div><pre id="file-source" class="file-source"><code>Select a file to inspect its indexed source.</code></pre></div>
+      </section>
+
+      <section class="view hidden data-view" id="view-graph" aria-label="Import map">
+        <div class="graph-info"><div><p class="workspace-eyebrow">REPOSITORY STRUCTURE</p><strong>Import map</strong></div><span id="graph-note">Relationships are parsed from real source imports.</span></div>
+        <div id="graph-view" class="graph-view"><p class="answer-hint">Select a repository to explore file relationships.</p></div>
+      </section>
+
+      <section class="view hidden data-view" id="view-investigations" aria-label="Investigations">
+        <div class="investigation-heading"><p class="workspace-eyebrow">SOURCE-BACKED NOTES</p><h3>Investigations</h3><p>Save a question and its current source findings for later.</p></div>
+        <form id="investigation-form" class="investigation-form"><label>Investigation title<input id="investigation-title" maxlength="120" placeholder="e.g. Login redirect fails" required></label><label>Problem statement<textarea id="investigation-question" maxlength="500" rows="3" placeholder="Describe what you observed…" required></textarea></label><button class="primary small" type="submit">Save investigation <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>
+        <div id="investigation-list" class="investigation-list"></div>
+      </section>
+    </section>
+
+    <aside class="shiro-stage" aria-label="Shiro assistant status">
+      <div class="stage-heading"><span>SHIRO / ACTIVE</span><span class="stage-ring" aria-hidden="true"></span></div>
+      <figure class="portrait-frame"><div class="portrait-aura" aria-hidden="true"></div><img id="shiro-portrait" src="assets/shiro-reference-portrait.png" alt="Shiro, ready to inspect the selected repository" loading="eager"><figcaption class="portrait-caption"><span class="portrait-caption-label">CURRENT STATE</span><strong class="companion-state-label">Ready</strong></figcaption></figure>
+      <div class="stage-message"><span class="stage-spark" aria-hidden="true">✳</span><p>Every answer should have a trail back to the code.</p></div>
+      <div class="stage-context"><span>REPOSITORY CONTEXT</span><strong class="companion-repo-label"> · Select a repository</strong><p>SHIRO searches the selected indexed snapshot and cites the matching source.</p></div>
+      <div class="stage-foot"><span class="status-dot" aria-hidden="true"></span><span>LOCAL WORKSPACE</span></div>
+    </aside>
+  </main>
+
+  <dialog id="connect-dialog"><form id="connect-form" method="dialog"><button type="button" class="dialog-close" aria-label="Close" data-action="close-dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button><p class="workspace-eyebrow">GITHUB REPOSITORY</p><h2>Bring a repository into focus.</h2><p>Paste a public GitHub repository URL. SHIRO downloads a bounded source snapshot and indexes it on this machine.</p><label for="repo-url">Public repository URL</label><input id="repo-url" type="url" placeholder="https://github.com/owner/repository" autocomplete="url" required><div class="dialog-note">You can include a branch with /tree/branch. Private repositories need GitHub sign-in, which is not configured yet. Source code is never executed.</div><div id="connect-error" class="error-message" role="alert"></div><button class="primary" type="submit" id="connect-submit">Index from GitHub <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>

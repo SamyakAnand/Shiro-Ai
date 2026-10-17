@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-17T12:00:00+05:30",
+  "title": "Design System: SHIRO CodeMind",
+  "extensions": {
+    "colorMeta": {
+      "midnight": {"role": "neutral", "displayName": "Midnight Ink", "canonical": "#090711", "tonalRamp": ["#090711", "#110F1C", "#191628"]},
+      "cyan": {"role": "primary", "displayName": "Signal Cyan", "canonical": "#54E6F5", "tonalRamp": ["#D9FAFD", "#54E6F5", "#148C9A"]},
+      "violet": {"role": "secondary", "displayName": "Shiro Violet", "canonical": "#A47CFF", "tonalRamp": ["#ECE3FF", "#A47CFF", "#6241B5"]},
+      "pink": {"role": "tertiary", "displayName": "Aurora Pink", "canonical": "#F98BE7", "tonalRamp": ["#FFE1F8", "#F98BE7", "#A9469A"]},
+      "ink": {"role": "neutral", "displayName": "Icy Text", "canonical": "#F6F1FF", "tonalRamp": ["#F6F1FF", "#B8B1C9", "#777084"]}
+    },
+    "typographyMeta": {
+      "display": {"displayName": "Workspace Display", "purpose": "App title and section headings."},
+      "body": {"displayName": "Switzer Interface", "purpose": "Conversation, navigation, and workspace labels."},
+      "code": {"displayName": "Code Mono", "purpose": "Source excerpts, paths, and technical values."}
+    },
+    "shadows": [
+      {"name": "dialog", "value": "0 24px 72px rgba(2, 1, 10, 0.65)", "purpose": "Lift the repository connection dialog above the workspace."},
+      {"name": "portrait-glow", "value": "0 16px 54px rgba(164, 124, 255, 0.16)", "purpose": "Keep a restrained local halo behind the Shiro portrait."}
+    ],
+    "motion": [
+      {"name": "expression-crossfade", "value": "opacity 180ms cubic-bezier(0.2, 0.8, 0.2, 1)", "purpose": "Make real assistant state changes feel continuous."},
+      {"name": "idle-breathe", "value": "transform 5.8s ease-in-out infinite", "purpose": "A subtle portrait-only idle movement; disabled for reduced-motion preferences."}
+    ],
+    "breakpoints": [
+      {"name": "tablet", "value": "1024px"},
+      {"name": "phone", "value": "700px"}
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The main action, such as connecting a repository or sending a message.",
+      "html": "<button class=\"ds-primary\">Connect repository</button>",
+      "css": ".ds-primary { background: #54E6F5; color: #090711; border: 1px solid #54E6F5; border-radius: 13px; padding: 10px 15px; font: 600 14px/1.2 Switzer, Inter, sans-serif; transition: transform 160ms ease, background 160ms ease; } .ds-primary:hover { background: #8BF0FA; transform: translateY(-1px); } .ds-primary:focus-visible { outline: 2px solid #F6F1FF; outline-offset: 3px; }"
+    },
+    {
+      "name": "Quiet Action",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Secondary workspace controls and navigation actions.",
+      "html": "<button class=\"ds-quiet\">Files</button>",
+      "css": ".ds-quiet { background: #191628; color: #F6F1FF; border: 1px solid #342D4A; border-radius: 8px; padding: 8px 11px; font: 500 13px/1.3 Switzer, Inter, sans-serif; transition: border-color 160ms ease, color 160ms ease; } .ds-quiet:hover { border-color: #A47CFF; color: #F6F1FF; } .ds-quiet:focus-visible { outline: 2px solid #54E6F5; outline-offset: 2px; }"
+    },
+    {
+      "name": "Chat Input",
+      "kind": "input",
+      "refersTo": "input-chat",
+      "description": "The main repository question composer.",
+      "html": "<textarea class=\"ds-chat\" aria-label=\"Ask SHIRO\" placeholder=\"Ask about this codebase…\"></textarea>",
+      "css": ".ds-chat { background: #090711; color: #F6F1FF; border: 1px solid #342D4A; border-radius: 13px; padding: 12px 14px; font: 400 14px/1.55 Switzer, Inter, sans-serif; } .ds-chat::placeholder { color: #B8B1C9; } .ds-chat:focus { border-color: #54E6F5; outline: 2px solid rgba(84, 230, 245, 0.24); outline-offset: 1px; }"
+    },
+    {
+      "name": "Selected Navigation",
+      "kind": "nav",
+      "refersTo": "nav-selected",
+      "description": "The active workspace view in the feature rail.",
+      "html": "<button class=\"ds-nav\" aria-current=\"page\">Ask SHIRO</button>",
+      "css": ".ds-nav { background: #191628; color: #54E6F5; border: 1px solid #342D4A; border-radius: 8px; padding: 10px 12px; font: 500 13px/1.3 Switzer, Inter, sans-serif; } .ds-nav:focus-visible { outline: 2px solid #54E6F5; outline-offset: 2px; }"
+    },
+    {
+      "name": "Source Evidence",
+      "kind": "custom",
+      "refersTo": "evidence-panel",
+      "description": "An expandable real source excerpt supporting an answer.",
+      "html": "<details class=\"ds-evidence\" open><summary>src/auth.py · Python</summary><pre>12: def authenticate_user(token):</pre></details>",
+      "css": ".ds-evidence { background: #110F1C; color: #F6F1FF; border: 1px solid #342D4A; border-radius: 13px; padding: 12px; } .ds-evidence summary { color: #54E6F5; cursor: pointer; font: 500 13px/1.4 Switzer, Inter, sans-serif; } .ds-evidence pre { overflow: auto; color: #E2DAF3; font: 400 12px/1.65 'Cascadia Code', Consolas, monospace; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Shiro's Code Observatory",
+    "overview": "A dark, precise repository workspace with Shiro as its visible guide. The chat and real code evidence occupy the main work area while local character artwork and violet/cyan accents make the identity unmistakable.",
+    "keyCharacteristics": ["Character art is prominent, not a floating widget.", "Real repository tools remain central.", "Expression follows real system state."],
+    "rules": [{"name": "The Evidence-First Rule", "body": "Accent glow cannot outrank question text, code, or source citations.", "section": "colors"}],
+    "dos": ["Keep repository operations and evidence as the content of the experience.", "Use local art and accessible standard controls."],
+    "donts": ["Do not invent metrics, code relationships, or AI activity.", "Do not pretend static art is a rigged 3D character."]
+  }
+}

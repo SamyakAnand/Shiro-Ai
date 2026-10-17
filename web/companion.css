@@ -1,0 +1,13 @@
+/* Character expression and activity states; all state changes are driven by real app events. */
+#workspace-shell[data-state="idle"] #shiro-portrait{animation:shiro-idle 5.8s ease-in-out infinite}
+#workspace-shell[data-state="searching_repository"] .stage-ring,#workspace-shell[data-state="analyzing_dependencies"] .stage-ring,#workspace-shell[data-state="generating_answer"] .stage-ring{animation:shiro-pulse 1.4s ease-in-out infinite}
+#workspace-shell[data-state="success"] .stage-ring{background:var(--green);border-color:var(--green);box-shadow:0 0 13px #6fe7c579}
+#workspace-shell[data-state="warning"] .stage-ring{background:var(--amber);border-color:var(--amber);box-shadow:0 0 13px #ffd37b70}
+#workspace-shell[data-state="error"] .stage-ring{background:var(--red);border-color:var(--red);box-shadow:0 0 13px #ff7e9d66}
+#workspace-shell[data-state="searching_repository"] .assistant-presence small i,#workspace-shell[data-state="analyzing_dependencies"] .assistant-presence small i,#workspace-shell[data-state="generating_answer"] .assistant-presence small i{background:var(--amber)}
+#workspace-shell[data-state="success"] .assistant-presence small i{background:var(--green)}
+#workspace-shell[data-state="warning"] .assistant-presence small i{background:var(--amber)}
+#workspace-shell[data-state="error"] .assistant-presence small i{background:var(--red)}
+@keyframes shiro-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes shiro-pulse{50%{opacity:.45;transform:scale(.82)}}
+@media(prefers-reduced-motion:reduce){#workspace-shell[data-state="idle"] #shiro-portrait,#workspace-shell[data-state="searching_repository"] .stage-ring,#workspace-shell[data-state="analyzing_dependencies"] .stage-ring,#workspace-shell[data-state="generating_answer"] .stage-ring{animation:none}}

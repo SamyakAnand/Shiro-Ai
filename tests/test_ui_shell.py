@@ -24,9 +24,20 @@ class ShiroWorkspaceShellTests(unittest.TestCase):
         self.assertIn('id="shiro-portrait"', self.html)
 
     def test_repository_tools_remain_available_as_workspace_views(self):
-        for view in ("ask", "files", "graph", "investigations"):
+        for view in ("ask", "files", "graph", "investigations", "studio"):
             self.assertIn(f'data-tab="{view}"', self.html)
             self.assertIn(f'id="view-{view}"', self.html)
+
+    def test_visual_explanations_and_study_outputs_are_in_the_workspace(self):
+        self.assertIn('id="mindmap-view"', self.html)
+        self.assertIn('data-visual="mindmap"', self.html)
+        for output in ("report", "flashcards", "quiz"):
+            self.assertIn(f'data-output="{output}"', self.html)
+
+    def test_guided_tour_has_real_action_gates_and_skip(self):
+        self.assertIn('id="tour-panel"', self.html)
+        self.assertIn('data-action="tour-next"', self.html)
+        self.assertIn('data-action="tour-skip"', self.html)
 
 
 if __name__ == "__main__":

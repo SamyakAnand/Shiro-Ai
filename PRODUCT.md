@@ -20,16 +20,18 @@ SHIRO ties repository exploration and answers to real indexed files, line excerp
 
 ## Operating Context
 
-The current application runs on one developer machine, binds to loopback by default, indexes public GitHub repositories, and stores its SQLite index locally. Repository-specific questions should be answered only from matched source evidence.
+The application runs locally with SQLite or as a Vercel-hosted workspace using Supabase Auth and persistent Postgres. It indexes public GitHub repositories; hosted users own their repository snapshots and outputs. Repository-specific explanations should remain tied to matched source evidence.
 
 ## Capabilities and Constraints
 
 - Connect and index a bounded public GitHub source snapshot.
 - Browse indexed files, search source, inspect resolved relative imports, and save investigations.
+- Visualize the file/folder/symbol hierarchy and resolved imports; learn the workspace with an action-gated guided tour.
+- Generate and revisit source-cited reports, flashcards, and quizzes, preserving the snapshot commit.
 - Optional NVIDIA hosted answer generation uses a fixed free endpoint; a missing or unavailable provider falls back to local retrieval.
 - Repository source code is never executed. Full repository data remains local; only matched excerpts and the question are sent to NVIDIA when the provider is configured.
-- The application has no authentication or multi-user authorization and is not intended to be exposed to a network.
-- Preserve the existing Python standard-library server, SQLite storage, vanilla HTML/CSS/JavaScript frontend, and API behavior.
+- Local development stays on loopback and SQLite. Hosted deployment requires Supabase Auth, Postgres, RLS, and per-user repository checks; missing hosted config must not fall back to SQLite.
+- Preserve the Python HTTP server, vanilla HTML/CSS/JavaScript frontend, local SQLite mode, and existing API behavior.
 
 ## Brand Commitments
 

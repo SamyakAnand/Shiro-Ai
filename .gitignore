@@ -4,3 +4,7 @@ __pycache__/
 .env
 data/
 .taste-skill/
+node_modules/
+dist/
+.vercel/
+supabase/.temp/

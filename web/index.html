@@ -28,16 +28,19 @@
       <div class="topbar-actions">
         <span class="branch-chip" id="branch-chip">LOCAL WORKSPACE</span>
         <button class="connect-top" data-action="connect"><span>Connect GitHub repo</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
+        <button class="quiet small auth-signout" id="auth-signout" hidden>Sign out</button>
       </div>
     </header>
 
     <nav class="rail" aria-label="Workspace views">
-      <button class="workspace-link tab selected" data-tab="ask" aria-current="page" aria-label="Ask SHIRO" title="Ask SHIRO"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5h14v10H11l-4.5 3v-3H5z"/><path d="M9 10h6M9 13h4"/></svg><span>Ask SHIRO</span></button>
+      <button class="workspace-link tab selected" data-tab="ask" aria-current="page" aria-label="Ask SHIRO" title="Ask SHIRO"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5h14v10H11l-4.5 3v-3H5z"/><path d="M9 10h6M9 13h4"/></svg><span>Ask</span></button>
       <button class="workspace-link tab" data-tab="files" aria-label="Files" title="Files"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h6l2 2h7v11h-15z"/><path d="M4.5 9h15"/></svg><span>Files</span></button>
-      <button class="workspace-link tab" data-tab="graph" aria-label="Connections" title="Connections"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="17.5" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="m8 11 7.5-4M8 13l7.8 4"/></svg><span>Connections</span></button>
-      <button class="workspace-link tab" data-tab="investigations" aria-label="Investigations" title="Investigations"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h12v15H6zM9 8h6M9 11.5h6M9 15h4"/></svg><span>Investigations</span></button>
+      <button class="workspace-link tab" data-tab="graph" aria-label="Connections" title="Connections"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="17.5" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="m8 11 7.5-4M8 13l7.8 4"/></svg><span>Graph</span></button>
+      <button class="workspace-link tab" data-tab="investigations" aria-label="Investigations" title="Investigations"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h12v15H6zM9 8h6M9 11.5h6M9 15h4"/></svg><span>Notes</span></button>
+      <button class="workspace-link tab" data-tab="studio" aria-label="Studio" title="Studio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v13H4zM8 9h8M8 12h5M8 15h7"/><path d="m17 3 1.2 1.2L17 5.4 15.8 4.2z"/></svg><span>Studio</span></button>
+      <button class="workspace-link" data-action="tour-start" aria-label="Start guided tour" title="Guided tour"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m10 8 6 4-6 4z"/></svg><span>Tour</span></button>
       <div class="rail-spacer"></div>
-      <span class="rail-presence"><i aria-hidden="true"></i> LOCAL</span>
+      <span class="rail-presence"><i aria-hidden="true"></i> <span id="rail-mode-label">LOCAL</span></span>
     </nav>
 
     <aside class="repo-panel" id="repo-panel" aria-label="Repositories">
@@ -49,7 +52,7 @@
       <div id="repo-list" class="repo-list">
         <div class="empty-repos"><div class="empty-orbit" aria-hidden="true"><span></span><span></span><span></span></div><strong>No repository yet</strong><p>Connect a public GitHub repository and SHIRO will map its source locally.</p><button class="primary small" data-action="connect">Connect GitHub <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
       </div>
-      <div class="repo-footer"><span class="repo-lock" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span><span>Index stays on this machine</span></div>
+      <div class="repo-footer"><span class="repo-lock" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span><span id="repo-storage-label">Index stays on this machine</span></div>
     </aside>
 
     <section class="explorer" id="workspace" aria-label="Repository workspace">
@@ -62,6 +65,7 @@
         <button class="tab" data-tab="files" role="tab" aria-selected="false">Source files</button>
         <button class="tab" data-tab="graph" role="tab" aria-selected="false">Import map</button>
         <button class="tab" data-tab="investigations" role="tab" aria-selected="false">Investigations</button>
+        <button class="tab" data-tab="studio" role="tab" aria-selected="false">Studio</button>
       </div>
 
       <section class="view conversation-view" id="view-ask" aria-label="Conversation with SHIRO">
@@ -82,14 +86,32 @@
       </section>
 
       <section class="view hidden data-view" id="view-graph" aria-label="Import map">
-        <div class="graph-info"><div><p class="workspace-eyebrow">REPOSITORY STRUCTURE</p><strong>Import map</strong></div><span id="graph-note">Relationships are parsed from real source imports.</span></div>
+        <div class="graph-info"><div><p class="workspace-eyebrow">REPOSITORY STRUCTURE</p><strong id="visual-title">Import map</strong></div><div class="visual-tools"><div class="visual-switch" role="group" aria-label="Choose repository visualization"><button class="selected" data-visual="imports" aria-pressed="true">Imports</button><button data-visual="mindmap" aria-pressed="false">Mind map</button></div><span id="graph-note">Relationships are parsed from real source imports.</span></div></div>
         <div id="graph-view" class="graph-view"><p class="answer-hint">Select a repository to explore file relationships.</p></div>
+        <div id="mindmap-view" class="graph-view hidden" aria-label="Interactive codebase mind map"><p class="answer-hint">Select a repository to build its source map.</p></div>
       </section>
 
       <section class="view hidden data-view" id="view-investigations" aria-label="Investigations">
         <div class="investigation-heading"><p class="workspace-eyebrow">SOURCE-BACKED NOTES</p><h3>Investigations</h3><p>Save a question and its current source findings for later.</p></div>
         <form id="investigation-form" class="investigation-form"><label>Investigation title<input id="investigation-title" maxlength="120" placeholder="e.g. Login redirect fails" required></label><label>Problem statement<textarea id="investigation-question" maxlength="500" rows="3" placeholder="Describe what you observed…" required></textarea></label><button class="primary small" type="submit">Save investigation <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>
         <div id="investigation-list" class="investigation-list"></div>
+      </section>
+
+      <section class="view hidden data-view studio-view" id="view-studio" aria-label="SHIRO Studio learning tools">
+        <div class="studio-heading"><div><p class="workspace-eyebrow">SOURCE-GROUNDED LEARNING</p><h3>Studio</h3><p>Turn this indexed snapshot into explanations you can inspect and study.</p></div><span id="studio-commit" class="branch-chip">No snapshot selected</span></div>
+        <div class="studio-actions" role="group" aria-label="Create a Studio output">
+          <button class="studio-action selected" data-output="report" aria-pressed="true"><strong>Report</strong><span>Briefing, architecture, feature trace, or bug investigation</span></button>
+          <button class="studio-action" data-output="mindmap" aria-pressed="false"><strong>Mind map</strong><span>Explore folders, symbols, and imports</span></button>
+          <button class="studio-action" data-output="flashcards" aria-pressed="false"><strong>Flashcards</strong><span>Review concepts from source excerpts</span></button>
+          <button class="studio-action" data-output="quiz" aria-pressed="false"><strong>Quiz</strong><span>Check what you understood</span></button>
+        </div>
+        <form id="studio-form" class="studio-form">
+          <label id="report-format-wrap">Report style<select id="report-format"><option>repository briefing</option><option>architecture walkthrough</option><option>feature trace</option><option>bug investigation</option></select></label>
+          <label>Focus <input id="studio-focus" maxlength="240" placeholder="e.g. sign-in flow, request routing, database layer"></label>
+          <button id="studio-generate" class="primary small" type="submit">Generate report</button>
+          <p id="studio-status" role="status" aria-live="polite">Generated items cite real files and lines from this snapshot.</p>
+        </form>
+        <div class="studio-layout"><section id="studio-result" class="studio-result" aria-live="polite"><p class="answer-hint">Choose an output to get started. Saved work stays attached to its source commit.</p></section><aside class="studio-library"><h4>Saved outputs</h4><div id="studio-library-list"><p class="answer-hint">Your reports and study sets will appear here.</p></div></aside></div>
       </section>
     </section>
 
@@ -98,11 +120,25 @@
       <figure class="portrait-frame"><div class="portrait-aura" aria-hidden="true"></div><img id="shiro-portrait" src="assets/shiro-reference-portrait.png" alt="Shiro, ready to inspect the selected repository" loading="eager"><figcaption class="portrait-caption"><span class="portrait-caption-label">CURRENT STATE</span><strong class="companion-state-label">Ready</strong></figcaption></figure>
       <div class="stage-message"><span class="stage-spark" aria-hidden="true">✳</span><p>Every answer should have a trail back to the code.</p></div>
       <div class="stage-context"><span>REPOSITORY CONTEXT</span><strong class="companion-repo-label"> · Select a repository</strong><p>SHIRO searches the selected indexed snapshot and cites the matching source.</p></div>
-      <div class="stage-foot"><span class="status-dot" aria-hidden="true"></span><span>LOCAL WORKSPACE</span></div>
+      <div class="stage-foot"><span class="status-dot" aria-hidden="true"></span><span id="workspace-mode-label">LOCAL WORKSPACE</span></div>
     </aside>
   </main>
 
-  <dialog id="connect-dialog"><form id="connect-form" method="dialog"><button type="button" class="dialog-close" aria-label="Close" data-action="close-dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button><p class="workspace-eyebrow">GITHUB REPOSITORY</p><h2>Bring a repository into focus.</h2><p>Paste a public GitHub repository URL. SHIRO downloads a bounded source snapshot and indexes it on this machine.</p><label for="repo-url">Public repository URL</label><input id="repo-url" type="url" placeholder="https://github.com/owner/repository" autocomplete="url" required><div class="dialog-note">You can include a branch with /tree/branch. Private repositories need GitHub sign-in, which is not configured yet. Source code is never executed.</div><div id="connect-error" class="error-message" role="alert"></div><button class="primary" type="submit" id="connect-submit">Index from GitHub <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form></dialog>
+  <section class="auth-gate" id="auth-gate" hidden aria-labelledby="auth-title">
+    <img src="/assets/shiro-icon-180.png" alt="" width="54" height="54">
+    <h1 id="auth-title">SHIRO CodeMind</h1>
+    <p id="auth-message">Sign in with GitHub to open your private SHIRO workspace. Repository import currently supports public repositories.</p>
+    <button class="primary" id="github-sign-in" type="button">Continue with GitHub</button>
+    <small>GitHub sign-in authenticates your SHIRO account. SHIRO does not request private repository access.</small>
+  </section>
+
+  <aside class="tour-panel" id="tour-panel" aria-labelledby="tour-title" hidden>
+    <div class="tour-progress"><span id="tour-progress-label">SHIRO walkthrough</span><button data-action="tour-skip" aria-label="Skip guided tour">Skip tour</button></div>
+    <h2 id="tour-title">Start with a repository</h2><p id="tour-copy">Select or connect a public repository. The tour only advances when you complete the action.</p>
+    <div class="tour-actions"><button class="quiet small" data-action="tour-start">Start tour</button><button class="primary small" data-action="tour-next" disabled>Next step</button></div>
+  </aside>
+
+  <dialog id="connect-dialog"><form id="connect-form" method="dialog"><button type="button" class="dialog-close" aria-label="Close" data-action="close-dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button><p class="workspace-eyebrow">GITHUB REPOSITORY</p><h2>Bring a repository into focus.</h2><p>Paste a public GitHub repository URL. SHIRO downloads a bounded source snapshot and indexes it on this machine.</p><label for="repo-url">Public repository URL</label><input id="repo-url" type="url" placeholder="https://github.com/owner/repository" autocomplete="url" required><div class="dialog-note">Include a branch with /tree/branch if needed. SHIRO connects public repositories only and never executes source code.</div><div id="connect-error" class="error-message" role="alert"></div><button class="primary" type="submit" id="connect-submit">Index from GitHub <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js" defer></script>
 </body>
